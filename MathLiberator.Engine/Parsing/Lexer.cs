@@ -18,7 +18,7 @@ namespace MathLiberator.Engine.Parsing
             start:
             while (!reader.End)
             {
-                reader.TryAdvanceTo('\n');
+                reader.AdvancePastAny(" \r\n");
                 reader.TryPeek(out var c);
 
                 switch (c)
@@ -98,7 +98,7 @@ namespace MathLiberator.Engine.Parsing
         Token<TNumber> LexOperator()
         {
             reader.TryRead(out var c);
-            if (reader.TryPeek(out var e) && e == '=')
+            if (reader.IsNext('='))
             {
                 reader.Advance(1);
                 return new Token<TNumber>(c switch
@@ -124,7 +124,7 @@ namespace MathLiberator.Engine.Parsing
         ReadOnlySpan<Char> TryReadAny(ReadOnlySpan<Char> values)
         {
             var startingPosition = reader.Position;
-            while (reader.IsNext(values))
+            while (reader.TryPeek(out var c) && values.Contains(c))
             {
                 reader.Advance(1);
             }

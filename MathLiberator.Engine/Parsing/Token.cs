@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace MathLiberator.Engine.Parsing
 {
@@ -28,6 +27,8 @@ namespace MathLiberator.Engine.Parsing
             NumericValue = default;
             StringValue = default;
         }
+
+        // TODO: Source location
 
         public TokenType TokenType { get; }
         public ReadOnlySpan<char> StringValue { get; }
