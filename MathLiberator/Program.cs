@@ -35,7 +35,7 @@ height = 100
                 lxr.Lex();
                 ref var token = ref lxr.Current;
                 Console.WriteLine(token.ToString());
-                if (token.TokenType is TokenType.EOF) break;
+                if (token.Kind is SyntaxKind.EndOfFile) break;
             }
         }
     }

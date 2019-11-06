@@ -1,6 +1,7 @@
 using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using MathLiberator.Engine.Expressions;
 
 namespace MathLiberator.Engine.Parsing
@@ -19,53 +20,46 @@ namespace MathLiberator.Engine.Parsing
         public MLExpression<TNumber> Parse()
         {
             lexer.Lex();
-            ref var z = ref lexer.Current;
+            ref var current = ref lexer.Current;
             
-            switch (z.TokenType)
-            {
-                case TokenType.EOF:
-                    break;
-                case TokenType.Identifier:
-                    break;
-                case TokenType.Number:   
-                    // Invalid
-                    break;
-                case TokenType.Operator:
-                    // Check for minus
-                    break;
-            }
 
             return default;
         }
 
-        static Int32 GetUnaryOperatorPrecedence(OperatorType op)
+        MLExpression<TNumber> ParsePrimaryExpression()
+        {
+            ref var current = ref lexer.Current;
+            return default;
+        }
+
+        static Int32 GetUnaryOperatorPrecedence(SyntaxKind op)
         {
             switch (op)
             {
-                case OperatorType.Plus:
-                case OperatorType.Minus:
+                case SyntaxKind.Plus:
+                case SyntaxKind.Minus:
                     return 6;
                 default:
                     return 0;
             }
         }
 
-        static Int32 GetOperatorPrecedence(OperatorType op)
+        static Int32 GetOperatorPrecedence(SyntaxKind op)
         {
             switch (op)
             {
-                case OperatorType.Asterisk:
-                case OperatorType.Slash:
+                case SyntaxKind.Asterisk:
+                case SyntaxKind.Slash:
                     return 5;
-                case OperatorType.Plus:
-                case OperatorType.Minus:
+                case SyntaxKind.Plus:
+                case SyntaxKind.Minus:
                     return 4;
-                case OperatorType.GreaterThan:
-                case OperatorType.LessThan:
-                case OperatorType.GreaterThanEquals:
-                case OperatorType.LessThanEquals:
+                case SyntaxKind.GreaterThan:
+                case SyntaxKind.LessThan:
+                case SyntaxKind.GreaterThanEquals:
+                case SyntaxKind.LessThanEquals:
                     return 3;
-                case OperatorType.Equals:
+                case SyntaxKind.Equals:
                     return 1;
                 default:
                     return 0;

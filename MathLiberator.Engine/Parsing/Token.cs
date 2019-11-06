@@ -8,42 +8,37 @@ namespace MathLiberator.Engine.Parsing
     {
         public Token(ReadOnlySpan<char> stringValue)
         {
-            TokenType = TokenType.Identifier;
+            Kind = SyntaxKind.Identifier;
             StringValue = stringValue;
             NumericValue = default;
-            OperatorValue = default;
         }
         
         public Token(TNumber numericValue)
         {
-            TokenType = TokenType.Number;
+            Kind = SyntaxKind.Number;
             NumericValue = numericValue;
             StringValue = default;
-            OperatorValue = default;
         }
 
-        public Token(OperatorType op)
+        public Token(SyntaxKind op)
         {
-            TokenType = TokenType.Operator;
-            OperatorValue = op;
+            Kind = op;
             NumericValue = default;
             StringValue = default;
         }
 
         // TODO: Source location
 
-        public TokenType TokenType { get; }
         public ReadOnlySpan<char> StringValue { get; }
         public TNumber? NumericValue { get; }
-        public OperatorType? OperatorValue { get; }
+        public SyntaxKind Kind { get; }
 
         public override String? ToString() =>
-            $@"<{TokenType} {TokenType switch
+            $@"<{Kind}{Kind switch
             {
-                TokenType.Identifier => StringValue.ToString(),
-                TokenType.Number => NumericValue.ToString(),
-                TokenType.Operator => OperatorValue.ToString(),
-                TokenType.EOF => "EOF"
+                SyntaxKind.Identifier => $" {StringValue.ToString()}",
+                SyntaxKind.Number => $" {NumericValue}",
+                _ => string.Empty
             }}>";
     }
 }

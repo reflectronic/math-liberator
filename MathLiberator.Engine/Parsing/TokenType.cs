@@ -1,15 +1,11 @@
 namespace MathLiberator.Engine.Parsing
 {
-    public enum TokenType
+    public enum SyntaxKind
     {
-        EOF,
+        EndOfFile,
         Identifier,
         Number,
-        Operator,
-    }
-    
-    public enum OperatorType
-    {
+        
         OpenBrace,
         CloseBrace,
         OpenBracket,

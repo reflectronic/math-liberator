@@ -7,7 +7,7 @@ namespace MathLiberator.Engine.Expressions
     public class BinaryExpression<TNumber> : MLExpression<TNumber>
         where TNumber : unmanaged
     {
-        public BinaryExpression(Expression<TNumber> left, Expression<TNumber> right, OperatorType @operator)
+        public BinaryExpression(Expression<TNumber> left, Expression<TNumber> right, SyntaxKind @operator)
         {
             Left = left;
             Right = right;
@@ -24,6 +24,6 @@ namespace MathLiberator.Engine.Expressions
             throw new NotImplementedException();
         }
         
-        public OperatorType Operator { get; }
+        public SyntaxKind Operator { get; }
     }
 }

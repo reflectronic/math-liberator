@@ -6,7 +6,7 @@ namespace MathLiberator.Engine.Expressions
     public class UnaryExpression<TNumber> : MLExpression<TNumber>
         where TNumber : unmanaged
     {
-        public UnaryExpression(MLExpression<TNumber> left, OperatorType @operator)
+        public UnaryExpression(MLExpression<TNumber> left, SyntaxKind @operator)
         {
             Left = left;
             Operator = @operator;
@@ -20,6 +20,6 @@ namespace MathLiberator.Engine.Expressions
             throw new NotImplementedException();
         }
         
-        public OperatorType Operator { get; }
+        public SyntaxKind Operator { get; }
     }
 }

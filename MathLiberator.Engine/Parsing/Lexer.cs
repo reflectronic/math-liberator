@@ -38,19 +38,19 @@ namespace MathLiberator.Engine.Parsing
                         goto start; // Avoid recursion
                     case '{':    
                         reader.Advance(1);
-                        return new Token<TNumber>(OperatorType.OpenBrace);
+                        return new Token<TNumber>(SyntaxKind.OpenBrace);
                     case '}':
                         reader.Advance(1);
-                        return new Token<TNumber>(OperatorType.CloseBrace);
+                        return new Token<TNumber>(SyntaxKind.CloseBrace);
                     case '[':
                         reader.Advance(1);
-                        return new Token<TNumber>(OperatorType.OpenBracket);
+                        return new Token<TNumber>(SyntaxKind.OpenBracket);
                     case ']':
                         reader.Advance(1);
-                        return new Token<TNumber>(OperatorType.CloseBracket);
+                        return new Token<TNumber>(SyntaxKind.CloseBracket);
                     case '=':
                         reader.Advance(1);
-                        return new Token<TNumber>(OperatorType.Equals);
+                        return new Token<TNumber>(SyntaxKind.Equals);
                     case '+': case '-': case '*': case '/':
                         return LexOperator();
                     case ':':
@@ -76,15 +76,15 @@ namespace MathLiberator.Engine.Parsing
         Token<TNumber> LexColon()
         {
             reader.Advance(1);
-            OperatorType v;
+            SyntaxKind v;
             if (reader.IsNext('='))
             {
                 reader.Advance(1);
-                v = OperatorType.ColonEquals;
+                v = SyntaxKind.ColonEquals;
             }
             else
             {
-                v = OperatorType.Colon;
+                v = SyntaxKind.Colon;
             }
 
             return new Token<TNumber>(v);
@@ -99,8 +99,8 @@ namespace MathLiberator.Engine.Parsing
 
             return new Token<TNumber>(c switch
             {
-                '>' => inclusive ? OperatorType.GreaterThanEquals : OperatorType.GreaterThan,
-                '<' => inclusive ? OperatorType.LessThanEquals : OperatorType.LessThan
+                '>' => inclusive ? SyntaxKind.GreaterThanEquals : SyntaxKind.GreaterThan,
+                '<' => inclusive ? SyntaxKind.LessThanEquals : SyntaxKind.LessThan
             });
         }
 
@@ -112,20 +112,20 @@ namespace MathLiberator.Engine.Parsing
                 reader.Advance(1);
                 return new Token<TNumber>(c switch
                 {
-                    '+' => OperatorType.PlusEquals,
-                    '-' => OperatorType.MinusEquals,
-                    '*' => OperatorType.AsteriskEquals,
-                    '/' => OperatorType.SlashEquals
+                    '+' => SyntaxKind.PlusEquals,
+                    '-' => SyntaxKind.MinusEquals,
+                    '*' => SyntaxKind.AsteriskEquals,
+                    '/' => SyntaxKind.SlashEquals
                 });
             }
             else
             {
                 return new Token<TNumber>(c switch
                 {
-                    '+' => OperatorType.Plus,
-                    '-' => OperatorType.Minus,
-                    '*' => OperatorType.Asterisk,
-                    '/' => OperatorType.Slash
+                    '+' => SyntaxKind.Plus,
+                    '-' => SyntaxKind.Minus,
+                    '*' => SyntaxKind.Asterisk,
+                    '/' => SyntaxKind.Slash
                 });
             }
         }
