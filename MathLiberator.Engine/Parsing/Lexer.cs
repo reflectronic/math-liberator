@@ -1,19 +1,28 @@
 using System;
 using System.Buffers;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace MathLiberator.Engine.Parsing
 {
+    [StructLayout(LayoutKind.Auto)]
     public ref struct Lexer<TNumber> where TNumber : unmanaged
     {
         SequenceReader<Char> reader;
+
+        public Token<TNumber> Current;
         
         public Lexer(SequenceReader<Char> reader)
         {
             this.reader = reader;
+            Current = default;
         }
 
-        public Token<TNumber> Lex()
+        public void Lex()
+        {
+            Current = GetToken();
+        }
+
+        Token<TNumber> GetToken()
         {
             start:
             while (!reader.End)

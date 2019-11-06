@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace MathLiberator.Engine.Parsing
 {
-    public ref struct Token<TNumber> where TNumber : unmanaged
+    [StructLayout(LayoutKind.Auto)]
+    public readonly ref struct Token<TNumber> where TNumber : unmanaged
     {
         public Token(ReadOnlySpan<char> stringValue)
         {
@@ -40,7 +42,8 @@ namespace MathLiberator.Engine.Parsing
             {
                 TokenType.Identifier => StringValue.ToString(),
                 TokenType.Number => NumericValue.ToString(),
-                TokenType.Operator => OperatorValue.ToString()
+                TokenType.Operator => OperatorValue.ToString(),
+                TokenType.EOF => "EOF"
             }}>";
     }
 }

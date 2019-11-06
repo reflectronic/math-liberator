@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Buffers;
+using System.Dynamic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using MathLiberator.Engine.Parsing;
 
 namespace MathLiberator
@@ -24,9 +30,12 @@ height = 100
 }";
             
             var lxr = new Lexer<Double>(new SequenceReader<Char>(new ReadOnlySequence<Char>(test.AsMemory())));
-            while (lxr.Lex() is var t && t.TokenType != TokenType.EOF)
+            while (true)
             {
-                Console.WriteLine(t.ToString());
+                lxr.Lex();
+                ref var token = ref lxr.Current;
+                Console.WriteLine(token.ToString());
+                if (token.TokenType is TokenType.EOF) break;
             }
         }
     }
