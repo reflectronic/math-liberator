@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Buffers;
-using MathLiberator.Engine.Syntax;
+using MathLiberator.Syntax;
 
 namespace MathLiberator
 {

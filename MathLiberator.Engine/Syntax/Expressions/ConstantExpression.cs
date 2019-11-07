@@ -1,13 +1,13 @@
 using System;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class ConstantExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
+    public class ConstantExpression<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
         public TNumber Value { get; }
 
-        public ConstantExpressionSyntax(TNumber value)
+        public ConstantExpression(TNumber value)
         {
             Value = value;
         }

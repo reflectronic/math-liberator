@@ -1,11 +1,11 @@
 using System;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class BinaryExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
+    public class BinaryExpression<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
-        public BinaryExpressionSyntax(ExpressionSyntax<TNumber> left, SyntaxKind @operator, ExpressionSyntax<TNumber> right)
+        public BinaryExpression(ExpressionSyntax<TNumber> left, SyntaxKind @operator, ExpressionSyntax<TNumber> right)
         {
             Left = left;
             Right = right;

@@ -1,14 +1,14 @@
 using System;
 using System.Buffers;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class IdentifierExpressionSyntax<TNumber> : ExpressionSyntax<TNumber> 
+    public class IdentifierExpression<TNumber> : ExpressionSyntax<TNumber> 
         where TNumber : unmanaged
     {
         public ReadOnlySequence<Char> Identifier { get; }
 
-        public IdentifierExpressionSyntax(ReadOnlySequence<Char> identifier)
+        public IdentifierExpression(ReadOnlySequence<Char> identifier)
         {
             Identifier = identifier;
         }

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Immutable;
 
-namespace MathLiberator.Engine    .Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class CompilationUnitSyntax<TNumber> : ExpressionSyntax<TNumber>
+    public class CompilationUnit<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
         public ImmutableArray<ExpressionSyntax<TNumber>> Statements { get; }
 
-        public CompilationUnitSyntax(ImmutableArray<ExpressionSyntax<TNumber>> statements)
+        public CompilationUnit(ImmutableArray<ExpressionSyntax<TNumber>> statements)
         {
             Statements = statements;
         }

@@ -1,4 +1,4 @@
-namespace MathLiberator.Engine.Syntax
+namespace MathLiberator.Syntax
 {
     public enum SyntaxKind
     {

@@ -1,11 +1,11 @@
 using System;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class UnaryExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
+    public class UnaryExpression<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
-        public UnaryExpressionSyntax(ExpressionSyntax<TNumber> operand, SyntaxKind @operator)
+        public UnaryExpression(ExpressionSyntax<TNumber> operand, SyntaxKind @operator)
         {
             Operand = operand;
             Operator = @operator;

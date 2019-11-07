@@ -1,16 +1,16 @@
 using System;
 using System.Buffers;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class StateExpressionSyntax<TNumber> : ExpressionSyntax<TNumber> 
+    public class StateExpression<TNumber> : ExpressionSyntax<TNumber> 
         where TNumber : unmanaged
     {
         public ReadOnlySequence<Char> Name { get; }
         public ExpressionSyntax<TNumber> InitialValue { get; }
         public Boolean Constant { get; }
 
-        public StateExpressionSyntax(ReadOnlySequence<Char> name, ExpressionSyntax<TNumber> initialValue, Boolean constant)
+        public StateExpression(ReadOnlySequence<Char> name, ExpressionSyntax<TNumber> initialValue, Boolean constant)
         {
             Name = name;
             InitialValue = initialValue;

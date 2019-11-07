@@ -1,6 +1,6 @@
 using System;
 
-namespace MathLiberator.Engine.Syntax
+namespace MathLiberator.Syntax
 {
     public static class SyntaxFacts
     {

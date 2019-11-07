@@ -1,8 +1,8 @@
 using System;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class MutationSyntax<TNumber> : ExpressionSyntax<TNumber>
+    public class MutationExpression<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
         public ExpressionSyntax<TNumber> Source { get; }
@@ -12,7 +12,7 @@ namespace MathLiberator.Engine.Syntax.Expressions
         public ExpressionSyntax<TNumber> Expression { get; }
 
 
-        public MutationSyntax(ExpressionSyntax<TNumber> source, SyntaxKind @operator, ExpressionSyntax<TNumber> expression)
+        public MutationExpression(ExpressionSyntax<TNumber> source, SyntaxKind @operator, ExpressionSyntax<TNumber> expression)
         {
             Source = source;
             Operator = @operator;

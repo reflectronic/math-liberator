@@ -2,10 +2,11 @@ using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
 
-namespace MathLiberator.Engine.Syntax
+namespace MathLiberator.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
-    public ref struct Lexer<TNumber> where TNumber : unmanaged
+    public ref struct Lexer<TNumber> 
+        where TNumber : unmanaged
     {
         SequenceReader<Char> reader;
 
@@ -187,6 +188,6 @@ namespace MathLiberator.Engine.Syntax
             return sequence;
         }
 
-        ReadOnlySpan<Char> SequenceToSpan(in ReadOnlySequence<Char> sequence) => sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray()
+        ReadOnlySpan<Char> SequenceToSpan(in ReadOnlySequence<Char> sequence) => sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray();
     }
 }

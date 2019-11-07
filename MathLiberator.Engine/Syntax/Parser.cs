@@ -4,12 +4,12 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MathLiberator.Engine.Syntax.Expressions;
+using MathLiberator.Syntax.Expressions;
 
-namespace MathLiberator.Engine.Syntax
+namespace MathLiberator.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
-    ref struct Parser<TNumber>
+    public ref struct Parser<TNumber>
         where TNumber : unmanaged
     {
         Lexer<TNumber> lexer;
@@ -30,9 +30,12 @@ namespace MathLiberator.Engine.Syntax
                 builder.Add(ParseStatement());
             }
             
-            return new CompilationUnitSyntax<TNumber>(builder.ToImmutable());
+            return new CompilationUnit<TNumber>(builder.ToImmutable());
         }
 
+        /// <summary>
+        /// Parses a statement. A statement is either a model statement or a state statement.
+        /// </summary>
         ExpressionSyntax<TNumber> ParseStatement()
         {
             ref var current = ref lexer.Current;
@@ -47,7 +50,26 @@ namespace MathLiberator.Engine.Syntax
             }
         }
         
-        ExpressionSyntax<TNumber> ParseModelStatement()
+        
+        /// <summary>
+        /// Parses the model statement.
+        /// </summary>
+        /// <remarks>
+        /// It is of the form:
+        /// <code>
+        /// [start:step:condition]
+        /// {
+        ///    multiple model_expression
+        /// }
+        /// </code>
+        ///
+        /// model_expression takes the form
+        /// <code>
+        /// state (*|+|etc.)= expr
+        /// </code>
+        /// </remarks>
+        /// <returns></returns>
+        ModelExpression<TNumber> ParseModelStatement()
         {
             MatchToken(SyntaxKind.OpenBracket, out _);
             var start = ParseExpression();
@@ -68,9 +90,15 @@ namespace MathLiberator.Engine.Syntax
 
             MatchToken(SyntaxKind.CloseBrace, out _);
 
-            return new ModelExpressionSyntax<TNumber>(start, step, condition, builder.ToImmutable());
+            return new ModelExpression<TNumber>(start, step, condition, builder.ToImmutable());
         }
 
+        /// <summary>
+        /// Parse an expression of the form <c>identifier (=|:=|+=|etc.) expression</c>. 
+        /// </summary>
+        /// <remarks>
+        /// THis method is used to parse both state statements and model expressions, so we need to deal with both.
+        /// </remarks>
         ExpressionSyntax<TNumber> ParseStateExpression()
         {
             var id = ParseIdentifier();
@@ -79,6 +107,8 @@ namespace MathLiberator.Engine.Syntax
             lexer.Lex();
             
             var constant = false;
+            
+            // This method i
             switch (kind)
             {
                 case SyntaxKind.ColonEquals:
@@ -86,17 +116,20 @@ namespace MathLiberator.Engine.Syntax
                     goto case SyntaxKind.Equals;
                 case SyntaxKind.Equals:
                     var expr = ParseExpression();
-                    return new StateExpressionSyntax<TNumber>(id.Identifier, expr, constant);
+                    return new StateExpression<TNumber>(id.Identifier, expr, constant);
                 case SyntaxKind.PlusEquals:
                 case SyntaxKind.MinusEquals:
                 case SyntaxKind.AsteriskEquals:
                 case SyntaxKind.SlashEquals:
-                    return new MutationSyntax<TNumber>(id, kind, ParseExpression());
+                    return new MutationExpression<TNumber>(id, kind, ParseExpression());
                 default:
                     return default;
             }
         }
         
+        /// <summary>
+        /// Parses an entire expression. It handles unary and binary operations & their precedence.
+        /// </summary>
         ExpressionSyntax<TNumber> ParseExpression(Int32 parentPrecedence = 0)
         {
             ExpressionSyntax<TNumber> left;
@@ -107,7 +140,7 @@ namespace MathLiberator.Engine.Syntax
                 lexer.Lex();
                 ref var operatorToken = ref lexer.Current;
                 var operand = ParseExpression(unaryPrecedence);
-                left = new UnaryExpressionSyntax<TNumber>(operand, operatorToken.Kind);
+                left = new UnaryExpression<TNumber>(operand, operatorToken.Kind);
             }
             else
             {
@@ -125,12 +158,15 @@ namespace MathLiberator.Engine.Syntax
                 lexer.Lex();
                 currentToken = ref lexer.Current;
                 var right = ParseExpression(precedence);
-                left = new BinaryExpressionSyntax<TNumber>(left, kind, right);
+                left = new BinaryExpression<TNumber>(left, kind, right);
             }
 
             return left;
         }
 
+        /// <summary>
+        /// Parses the next one-element expression.
+        /// </summary>
         ExpressionSyntax<TNumber> ParsePrimaryExpression()
         {
             ref var current = ref lexer.Current;
@@ -148,26 +184,32 @@ namespace MathLiberator.Engine.Syntax
             }
         }
 
-        IdentifierExpressionSyntax<TNumber> ParseIdentifier()
+        IdentifierExpression<TNumber> ParseIdentifier()
         {
             MatchToken(SyntaxKind.Identifier, out var id);
-            return new IdentifierExpressionSyntax<TNumber>(id.StringValue);
+            return new IdentifierExpression<TNumber>(id.StringValue);
         }
-
-        ExpressionSyntax<TNumber> ParseNumberLiteral()
+        
+        ConstantExpression<TNumber> ParseNumberLiteral()
         {
             MatchToken(SyntaxKind.Number, out var num);
-            return new ConstantExpressionSyntax<TNumber>(num.NumericValue.Value);
+            return new ConstantExpression<TNumber>(num.NumericValue.Value);
         }
 
+        /// <summary>
+        /// Parses an expression of the form (expr)
+        /// </summary>
         ExpressionSyntax<TNumber> ParseParenthesizedExpression()
         {
             MatchToken(SyntaxKind.OpenParenthesis, out _);
             var expression = ParseExpression();
             MatchToken(SyntaxKind.CloseParenthesis, out _);
-            return new ParenthesizedExpressionSyntax<TNumber>(expression);
+            return new ParenthesizedExpression<TNumber>(expression);
         }
         
+        /// <summary>
+        /// Asserts that the current token is of a specific type and advances to the next token.
+        /// </summary>
         void MatchToken(SyntaxKind kind, out Token<TNumber> token)
         {
             ref var current = ref lexer.Current;
@@ -180,6 +222,7 @@ namespace MathLiberator.Engine.Syntax
             {
                 token = default;
                 Trace.Assert(false, "current.Kind is not equal to kind");
+                // TODO: Diagnostics
             }
         }
     }

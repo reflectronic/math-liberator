@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Immutable;
 
-namespace MathLiberator.Engine.Syntax.Expressions
+namespace MathLiberator.Syntax.Expressions
 {
-    public class ModelExpressionSyntax<TNumber> : ExpressionSyntax<TNumber> 
+    public class ModelExpression<TNumber> : ExpressionSyntax<TNumber> 
         where TNumber : unmanaged
     {
         public ExpressionSyntax<TNumber> Start { get; }
@@ -11,7 +11,7 @@ namespace MathLiberator.Engine.Syntax.Expressions
         public ExpressionSyntax<TNumber> Condition { get; }
         public ImmutableArray<ExpressionSyntax<TNumber>> ModelStatements { get; }
 
-        public ModelExpressionSyntax(ExpressionSyntax<TNumber> start, ExpressionSyntax<TNumber> step, ExpressionSyntax<TNumber> condition, ImmutableArray<ExpressionSyntax<TNumber>> modelStatements)
+        public ModelExpression(ExpressionSyntax<TNumber> start, ExpressionSyntax<TNumber> step, ExpressionSyntax<TNumber> condition, ImmutableArray<ExpressionSyntax<TNumber>> modelStatements)
         {
             Start = start;
             Step = step;
