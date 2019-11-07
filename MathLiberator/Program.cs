@@ -32,7 +32,7 @@ height = 100
             
             Console.WriteLine("---Parsing---");
             var parser = new Parser<Double>(new ReadOnlySequence<Char>(test.AsMemory()));
-            Console.WriteLine(parser.Parse());
+            Console.WriteLine(parser.ParseCompilationUnit());
         }
     }
 }

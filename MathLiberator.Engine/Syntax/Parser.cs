@@ -9,7 +9,7 @@ using MathLiberator.Engine.Syntax.Expressions;
 namespace MathLiberator.Engine.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
-    public ref struct Parser<TNumber>
+    ref struct Parser<TNumber>
         where TNumber : unmanaged
     {
         Lexer<TNumber> lexer;
@@ -19,7 +19,7 @@ namespace MathLiberator.Engine.Syntax
             lexer = new Lexer<TNumber>(new SequenceReader<Char>(sequence));
         }
         
-        public ExpressionSyntax<TNumber> Parse()
+        public ExpressionSyntax<TNumber> ParseCompilationUnit()
         {
             lexer.Lex();
             ref var current = ref lexer.Current;
@@ -46,33 +46,7 @@ namespace MathLiberator.Engine.Syntax
                     return default;
             }
         }
-
-        ExpressionSyntax<TNumber> ParseStateExpression()
-        {
-            var id = ParseIdentifier();
-            ref var op = ref lexer.Current;
-            var kind = op.Kind;
-            lexer.Lex();
-            var constant = false;
-            switch (kind)
-            {
-                case SyntaxKind.ColonEquals:
-                    constant = true;
-                    goto case SyntaxKind.Equals;
-                case SyntaxKind.Equals:
-                    var expr = ParseExpression();
-                    return new StateExpressionSyntax<TNumber>(id.Identifier, expr, constant);
-                case SyntaxKind.PlusEquals:
-                case SyntaxKind.MinusEquals:
-                case SyntaxKind.AsteriskEquals:
-                case SyntaxKind.SlashEquals:
-                    return new MutationSyntax<TNumber>(id, kind, ParseExpression());
-                default:
-                    return default;
-            }
-            
-        }
-
+        
         ExpressionSyntax<TNumber> ParseModelStatement()
         {
             MatchToken(SyntaxKind.OpenBracket, out _);
@@ -97,6 +71,32 @@ namespace MathLiberator.Engine.Syntax
             return new ModelExpressionSyntax<TNumber>(start, step, condition, builder.ToImmutable());
         }
 
+        ExpressionSyntax<TNumber> ParseStateExpression()
+        {
+            var id = ParseIdentifier();
+            ref var op = ref lexer.Current;
+            var kind = op.Kind;
+            lexer.Lex();
+            
+            var constant = false;
+            switch (kind)
+            {
+                case SyntaxKind.ColonEquals:
+                    constant = true;
+                    goto case SyntaxKind.Equals;
+                case SyntaxKind.Equals:
+                    var expr = ParseExpression();
+                    return new StateExpressionSyntax<TNumber>(id.Identifier, expr, constant);
+                case SyntaxKind.PlusEquals:
+                case SyntaxKind.MinusEquals:
+                case SyntaxKind.AsteriskEquals:
+                case SyntaxKind.SlashEquals:
+                    return new MutationSyntax<TNumber>(id, kind, ParseExpression());
+                default:
+                    return default;
+            }
+        }
+        
         ExpressionSyntax<TNumber> ParseExpression(Int32 parentPrecedence = 0)
         {
             ExpressionSyntax<TNumber> left;
