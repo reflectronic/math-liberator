@@ -1,12 +1,13 @@
 using System;
+using System.Buffers;
 using System.Runtime.InteropServices;
 
 namespace MathLiberator.Engine.Parsing
 {
     [StructLayout(LayoutKind.Auto)]
-    public readonly ref struct Token<TNumber> where TNumber : unmanaged
+    public readonly struct Token<TNumber> where TNumber : unmanaged
     {
-        public Token(ReadOnlySpan<char> stringValue)
+        public Token(ReadOnlySequence<char> stringValue)
         {
             Kind = SyntaxKind.Identifier;
             StringValue = stringValue;
@@ -29,7 +30,7 @@ namespace MathLiberator.Engine.Parsing
 
         // TODO: Source location
 
-        public ReadOnlySpan<char> StringValue { get; }
+        public ReadOnlySequence<char> StringValue { get; }
         public TNumber? NumericValue { get; }
         public SyntaxKind Kind { get; }
 

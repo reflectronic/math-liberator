@@ -6,6 +6,8 @@ namespace MathLiberator.Engine.Parsing
         Identifier,
         Number,
         
+        OpenParenthesis,
+        CloseParenthesis,
         OpenBrace,
         CloseBrace,
         OpenBracket,

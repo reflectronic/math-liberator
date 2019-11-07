@@ -1,6 +1,6 @@
 namespace MathLiberator.Engine.Expressions
 {
-    public class MLExpression<TNumber>
+    public class ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
     }

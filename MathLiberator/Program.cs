@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Buffers;
-using System.Dynamic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using MathLiberator.Engine.Parsing;
 
 namespace MathLiberator
@@ -15,8 +9,6 @@ namespace MathLiberator
         static void Main(String[] args)
         {
             var test = @"# a falling object with a mass of 10 kilograms (without air resistance)
-g := -9.81
-mass := 10
 gravity := g * mass
 acceleration := gravity / mass
 
@@ -36,6 +28,13 @@ height = 100
                 ref var token = ref lxr.Current;
                 Console.WriteLine(token.ToString());
                 if (token.Kind is SyntaxKind.EndOfFile) break;
+            }
+            
+            Console.WriteLine("---Parsing---");
+            var parser = new Parser<Double>(new ReadOnlySequence<Char>(test.AsMemory()));
+            while (parser.Parse() is var p && p is object)
+            {
+                Console.WriteLine(p.ToString());
             }
         }
     }

@@ -1,22 +1,18 @@
 using System;
-using System.Linq.Expressions;
 using MathLiberator.Engine.Parsing;
 
 namespace MathLiberator.Engine.Expressions
 {
-    public class BinaryExpression<TNumber> : MLExpression<TNumber>
+    public class UnaryExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged
     {
-        public BinaryExpression(Expression<TNumber> left, Expression<TNumber> right, SyntaxKind @operator)
+        public UnaryExpressionSyntax(ExpressionSyntax<TNumber> operand, SyntaxKind @operator)
         {
-            Left = left;
-            Right = right;
+            Operand = operand;
             Operator = @operator;
         }
 
-
-        public Expression<TNumber> Left { get; }
-        public Expression<TNumber> Right { get; }
+        public ExpressionSyntax<TNumber> Operand { get; }
 
         public TNumber Evaluate()
         {
@@ -25,5 +21,7 @@ namespace MathLiberator.Engine.Expressions
         }
         
         public SyntaxKind Operator { get; }
+        
+        public override String? ToString() => $"{Operator}{Operand}";
     }
 }

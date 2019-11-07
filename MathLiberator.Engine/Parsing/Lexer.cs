@@ -130,7 +130,7 @@ namespace MathLiberator.Engine.Parsing
             }
         }
 
-        ReadOnlySpan<Char> TryReadAny(ReadOnlySpan<Char> values)
+        ReadOnlySequence<Char> TryReadAny(ReadOnlySpan<Char> values)
         {
             var startingPosition = reader.Position;
             while (reader.TryPeek(out var c) && values.Contains(c))
@@ -140,28 +140,30 @@ namespace MathLiberator.Engine.Parsing
 
             var sequence = reader.Sequence.Slice(startingPosition, reader.Position);
 
-            return sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray();
+            return sequence;
         }
-        
+
+        ReadOnlySpan<Char> SequenceToSpan(in ReadOnlySequence<Char> sequence) => sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray();
+
         Token<TNumber> LexInteger()
         {
             var span = TryReadAny("012345789.");
 
             if (typeof(TNumber) == typeof(Single))
             {
-                Single.TryParse(span, out var num);
+                Single.TryParse(SequenceToSpan(span), out var num);
                 return new Token<TNumber>((TNumber) (Object) num);
             }
             
             if (typeof(TNumber) == typeof(Double))
             {
-                Double.TryParse(span, out var num);
+                Double.TryParse(SequenceToSpan(span), out var num);
                 return new Token<TNumber>((TNumber) (Object) num);
             }
             
             if (typeof(TNumber) == typeof(Decimal))
             {
-                Decimal.TryParse(span, out var num);
+                Decimal.TryParse(SequenceToSpan(span), out var num);
                 return new Token<TNumber>((TNumber) (Object) num);
             }
             
