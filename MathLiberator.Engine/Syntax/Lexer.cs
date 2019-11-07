@@ -2,7 +2,7 @@ using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
 
-namespace MathLiberator.Engine.Parsing
+namespace MathLiberator.Engine.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
     public ref struct Lexer<TNumber> where TNumber : unmanaged
@@ -48,6 +48,12 @@ namespace MathLiberator.Engine.Parsing
                     case ']':
                         reader.Advance(1);
                         return new Token<TNumber>(SyntaxKind.CloseBracket);
+                    case '(':
+                        reader.Advance(1);
+                        return new Token<TNumber>(SyntaxKind.OpenParenthesis);
+                    case ')':
+                        reader.Advance(1);
+                        return new Token<TNumber>(SyntaxKind.CloseParenthesis);
                     case '=':
                         reader.Advance(1);
                         return new Token<TNumber>(SyntaxKind.Equals);

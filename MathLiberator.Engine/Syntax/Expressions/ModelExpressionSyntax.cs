@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace MathLiberator.Engine.Expressions
+namespace MathLiberator.Engine.Syntax.Expressions
 {
     public class ModelExpressionSyntax<TNumber> : ExpressionSyntax<TNumber> 
         where TNumber : unmanaged

@@ -1,6 +1,6 @@
 using System;
 
-namespace MathLiberator.Engine.Expressions
+namespace MathLiberator.Engine.Syntax.Expressions
 {
     public class ConstantExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged

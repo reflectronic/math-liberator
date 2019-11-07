@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Immutable;
-using System.Linq.Expressions;
-using MathLiberator.Engine.Parsing;
 
-namespace MathLiberator.Engine.Expressions
+namespace MathLiberator.Engine    .Syntax.Expressions
 {
     public class CompilationUnitSyntax<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged

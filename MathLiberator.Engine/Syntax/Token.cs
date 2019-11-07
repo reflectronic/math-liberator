@@ -2,7 +2,7 @@ using System;
 using System.Buffers;
 using System.Runtime.InteropServices;
 
-namespace MathLiberator.Engine.Parsing
+namespace MathLiberator.Engine.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
     public readonly struct Token<TNumber> where TNumber : unmanaged

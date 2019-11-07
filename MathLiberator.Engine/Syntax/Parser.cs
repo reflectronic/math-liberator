@@ -1,13 +1,12 @@
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MathLiberator.Engine.Expressions;
+using MathLiberator.Engine.Syntax.Expressions;
 
-namespace MathLiberator.Engine.Parsing
+namespace MathLiberator.Engine.Syntax
 {
     [StructLayout(LayoutKind.Auto)]
     public ref struct Parser<TNumber>
@@ -42,31 +41,46 @@ namespace MathLiberator.Engine.Parsing
                 case SyntaxKind.OpenBracket:
                     return ParseModelStatement();
                 case SyntaxKind.Identifier:
-                    return ParseStateStatement();
+                    return ParseStateExpression();
                 default:
                     return default;
             }
         }
 
-        ExpressionSyntax<TNumber> ParseStateStatement()
+        ExpressionSyntax<TNumber> ParseStateExpression()
         {
-            MatchToken(SyntaxKind.Identifier, out var id);
+            var id = ParseIdentifier();
             ref var op = ref lexer.Current;
-            var constant = op.Kind == SyntaxKind.ColonEquals;
+            var kind = op.Kind;
             lexer.Lex();
-            var expr = ParseOperatorExpression();
+            var constant = false;
+            switch (kind)
+            {
+                case SyntaxKind.ColonEquals:
+                    constant = true;
+                    goto case SyntaxKind.Equals;
+                case SyntaxKind.Equals:
+                    var expr = ParseExpression();
+                    return new StateExpressionSyntax<TNumber>(id.Identifier, expr, constant);
+                case SyntaxKind.PlusEquals:
+                case SyntaxKind.MinusEquals:
+                case SyntaxKind.AsteriskEquals:
+                case SyntaxKind.SlashEquals:
+                    return new MutationSyntax<TNumber>(id, kind, ParseExpression());
+                default:
+                    return default;
+            }
             
-            return new StateExpressionSyntax<TNumber>(id.StringValue, expr, constant);
         }
 
         ExpressionSyntax<TNumber> ParseModelStatement()
         {
             MatchToken(SyntaxKind.OpenBracket, out _);
-            var start = ParseOperatorExpression();
+            var start = ParseExpression();
             MatchToken(SyntaxKind.Colon, out _);
-            var step = ParseOperatorExpression();
+            var step = ParseExpression();
             MatchToken(SyntaxKind.Colon, out _);
-            var condition = ParseOperatorExpression();
+            var condition = ParseExpression();
             MatchToken(SyntaxKind.CloseBracket, out _);
             MatchToken(SyntaxKind.OpenBrace, out _);
 
@@ -78,19 +92,21 @@ namespace MathLiberator.Engine.Parsing
                 builder.Add(ParseStatement());
             }
 
+            MatchToken(SyntaxKind.CloseBrace, out _);
+
             return new ModelExpressionSyntax<TNumber>(start, step, condition, builder.ToImmutable());
         }
 
-        ExpressionSyntax<TNumber> ParseOperatorExpression(Int32 parentPrecedence = 0)
+        ExpressionSyntax<TNumber> ParseExpression(Int32 parentPrecedence = 0)
         {
             ExpressionSyntax<TNumber> left;
             ref var current = ref lexer.Current;
-            var unaryPrecedence = GetUnaryOperatorPrecedence(current.Kind);
+            var unaryPrecedence = current.Kind.GetUnaryOperatorPrecedence();
             if (unaryPrecedence != 0 && unaryPrecedence >= parentPrecedence)
             {
                 lexer.Lex();
                 ref var operatorToken = ref lexer.Current;
-                var operand = ParseOperatorExpression(unaryPrecedence);
+                var operand = ParseExpression(unaryPrecedence);
                 left = new UnaryExpressionSyntax<TNumber>(operand, operatorToken.Kind);
             }
             else
@@ -102,13 +118,13 @@ namespace MathLiberator.Engine.Parsing
             {
                 ref var currentToken = ref lexer.Current;
                 var kind = currentToken.Kind;
-                var precedence = GetOperatorPrecedence(kind);
+                var precedence = kind.GetOperatorPrecedence();
                 if (precedence is 0 || precedence <= parentPrecedence)
                     break;
                 
                 lexer.Lex();
                 currentToken = ref lexer.Current;
-                var right = ParseOperatorExpression(precedence);
+                var right = ParseExpression(precedence);
                 left = new BinaryExpressionSyntax<TNumber>(left, kind, right);
             }
 
@@ -132,7 +148,7 @@ namespace MathLiberator.Engine.Parsing
             }
         }
 
-        ExpressionSyntax<TNumber> ParseIdentifier()
+        IdentifierExpressionSyntax<TNumber> ParseIdentifier()
         {
             MatchToken(SyntaxKind.Identifier, out var id);
             return new IdentifierExpressionSyntax<TNumber>(id.StringValue);
@@ -147,7 +163,7 @@ namespace MathLiberator.Engine.Parsing
         ExpressionSyntax<TNumber> ParseParenthesizedExpression()
         {
             MatchToken(SyntaxKind.OpenParenthesis, out _);
-            var expression = ParseOperatorExpression();
+            var expression = ParseExpression();
             MatchToken(SyntaxKind.CloseParenthesis, out _);
             return new ParenthesizedExpressionSyntax<TNumber>(expression);
         }
@@ -164,41 +180,6 @@ namespace MathLiberator.Engine.Parsing
             {
                 token = default;
                 Trace.Assert(false, "current.Kind is not equal to kind");
-            }
-        }
-        
-        static Int32 GetUnaryOperatorPrecedence(SyntaxKind op)
-        {
-            switch (op)
-            {
-                case SyntaxKind.Plus:
-                case SyntaxKind.Minus:
-                    return 6;
-                default:
-                    return 0;
-            }
-        }
-
-        static Int32 GetOperatorPrecedence(SyntaxKind op)
-        {
-            switch (op)
-            {
-                case SyntaxKind.Asterisk:
-                case SyntaxKind.Slash:
-                    return 5;
-                case SyntaxKind.Plus:
-                case SyntaxKind.Minus:
-                    return 4;
-                case SyntaxKind.GreaterThan:
-                case SyntaxKind.LessThan:
-                case SyntaxKind.GreaterThanEquals:
-                case SyntaxKind.LessThanEquals:
-                    return 3;
-                case SyntaxKind.Equals:
-                    return 1;
-                default:
-                    return 0;
-
             }
         }
     }

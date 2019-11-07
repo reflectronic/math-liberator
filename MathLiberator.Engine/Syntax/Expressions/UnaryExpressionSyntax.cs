@@ -1,7 +1,6 @@
 using System;
-using MathLiberator.Engine.Parsing;
 
-namespace MathLiberator.Engine.Expressions
+namespace MathLiberator.Engine.Syntax.Expressions
 {
     public class UnaryExpressionSyntax<TNumber> : ExpressionSyntax<TNumber>
         where TNumber : unmanaged

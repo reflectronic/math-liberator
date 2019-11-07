@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Buffers;
-using MathLiberator.Engine.Parsing;
+using MathLiberator.Engine.Syntax;
 
 namespace MathLiberator
 {
@@ -32,10 +32,7 @@ height = 100
             
             Console.WriteLine("---Parsing---");
             var parser = new Parser<Double>(new ReadOnlySequence<Char>(test.AsMemory()));
-            while (parser.Parse() is var p && p is object)
-            {
-                Console.WriteLine(p.ToString());
-            }
+            Console.WriteLine(parser.Parse());
         }
     }
 }
