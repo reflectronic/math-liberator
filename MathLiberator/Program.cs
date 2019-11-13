@@ -20,7 +20,6 @@ height = 100
     velocity += acceleration
     height += velocity
 }";
-            
             var lxr = new Lexer<Double>(new SequenceReader<Char>(new ReadOnlySequence<Char>(test.AsMemory())));
             while (true)
             {

@@ -15,7 +15,7 @@ namespace MathLiberator.Syntax
         public Lexer(SequenceReader<Char> reader)
         {
             var t = typeof(TNumber);
-            if (t != typeof(Single) && t != typeof(Double) && t != typeof(Decimal))
+            if (t != typeof(Single) && t != typeof(Double))
             {
                 throw new ArgumentException("Unsupported type for lexer.", nameof(TNumber));
             }
@@ -166,12 +166,6 @@ namespace MathLiberator.Syntax
                 return new Token<TNumber>((TNumber) (Object) num);
             }
             
-            if (typeof(TNumber) == typeof(Decimal))
-            {
-                Decimal.TryParse(SequenceToSpan(span), out var num);
-                return new Token<TNumber>((TNumber) (Object) num);
-            }
-
             return default;
         }
         

@@ -10,6 +10,7 @@ namespace MathLiberator.Syntax.Expressions
         public ParenthesizedExpression(ExpressionSyntax<TNumber> expression)
         {
             Expression = expression;
+            Kind = SyntaxKind.Parenthesized;
         }
 
         public override String? ToString() => $"({Expression})";

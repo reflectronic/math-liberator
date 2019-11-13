@@ -9,14 +9,14 @@ namespace MathLiberator.Syntax.Expressions
         {
             Operand = operand;
             Operator = @operator;
+            Kind = SyntaxKind.Unary;
         }
 
         public ExpressionSyntax<TNumber> Operand { get; }
 
         public TNumber Evaluate()
         {
-            // TODO: Fold constant expressions
-            throw new NotImplementedException();
+            return default;
         }
         
         public SyntaxKind Operator { get; }

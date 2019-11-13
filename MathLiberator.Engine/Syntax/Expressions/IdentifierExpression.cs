@@ -11,6 +11,7 @@ namespace MathLiberator.Syntax.Expressions
         public IdentifierExpression(ReadOnlySequence<Char> identifier)
         {
             Identifier = identifier;
+            Kind = SyntaxKind.Identifier;
         }
 
         public override String? ToString() => Identifier.ToString();

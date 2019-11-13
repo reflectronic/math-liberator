@@ -2,6 +2,7 @@ namespace MathLiberator.Syntax
 {
     public enum SyntaxKind
     {
+        // Token Kinds
         EndOfFile,
         Identifier,
         Number,
@@ -30,5 +31,18 @@ namespace MathLiberator.Syntax
         GreaterThanEquals,
         LessThan,
         LessThanEquals,
+        
+        // Expression
+        CompilationUnit,
+        Constant,
+        Model,
+        Parenthesized,
+        Unary,
+
+        // Binary Expression Kinds
+        Arithmetic,
+        State,
+        Mutation
+        
     }
 }

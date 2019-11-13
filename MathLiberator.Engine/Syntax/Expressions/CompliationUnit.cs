@@ -11,6 +11,8 @@ namespace MathLiberator.Syntax.Expressions
         public CompilationUnit(ImmutableArray<ExpressionSyntax<TNumber>> statements)
         {
             Statements = statements;
+            Kind = SyntaxKind.CompilationUnit;
+
         }
         
         public override String? ToString() => string.Join(Environment.NewLine, Statements);

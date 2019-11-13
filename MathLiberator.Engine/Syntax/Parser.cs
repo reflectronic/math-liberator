@@ -1,9 +1,12 @@
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Json;
 using MathLiberator.Syntax.Expressions;
 
 namespace MathLiberator.Syntax
@@ -116,12 +119,12 @@ namespace MathLiberator.Syntax
                     goto case SyntaxKind.Equals;
                 case SyntaxKind.Equals:
                     var expr = ParseExpression();
-                    return new StateExpression<TNumber>(id.Identifier, expr, constant);
+                    return new BinaryExpression<TNumber>(id, kind, expr, constant ? SyntaxKind.Constant : SyntaxKind.State);
                 case SyntaxKind.PlusEquals:
                 case SyntaxKind.MinusEquals:
                 case SyntaxKind.AsteriskEquals:
                 case SyntaxKind.SlashEquals:
-                    return new MutationExpression<TNumber>(id, kind, ParseExpression());
+                    return new BinaryExpression<TNumber>(id, kind, ParseExpression(), SyntaxKind.Mutation);
                 default:
                     return default;
             }
@@ -158,7 +161,7 @@ namespace MathLiberator.Syntax
                 lexer.Lex();
                 currentToken = ref lexer.Current;
                 var right = ParseExpression(precedence);
-                left = new BinaryExpression<TNumber>(left, kind, right);
+                left = new BinaryExpression<TNumber>(left, kind, right, SyntaxKind.Arithmetic);
             }
 
             return left;
