@@ -22,7 +22,7 @@ namespace MathLiberator.Syntax
             lexer = new Lexer<TNumber>(new SequenceReader<Char>(sequence));
         }
         
-        public ExpressionSyntax<TNumber> ParseCompilationUnit()
+        public CompilationUnit<TNumber> ParseCompilationUnit()
         {
             lexer.Lex();
             ref var current = ref lexer.Current;
@@ -207,7 +207,7 @@ namespace MathLiberator.Syntax
             MatchToken(SyntaxKind.OpenParenthesis, out _);
             var expression = ParseExpression();
             MatchToken(SyntaxKind.CloseParenthesis, out _);
-            return new ParenthesizedExpression<TNumber>(expression);
+            return new UnaryExpression<TNumber>(expression, SyntaxKind.Parenthesized);
         }
         
         /// <summary>

@@ -9,7 +9,6 @@ namespace MathLiberator.Syntax.Expressions
         {
             Operand = operand;
             Operator = @operator;
-            Kind = SyntaxKind.Unary;
         }
 
         public ExpressionSyntax<TNumber> Operand { get; }
@@ -21,6 +20,6 @@ namespace MathLiberator.Syntax.Expressions
         
         public SyntaxKind Operator { get; }
         
-        public override String? ToString() => $"{Operator}{Operand}";
+        public override String? ToString() => $"{Operator} ({Operand})";
     }
 }

@@ -12,7 +12,8 @@ namespace MathLiberator.Syntax.Expressions
             Operator = @operator;
             Kind = kind;
         }
-        
+
+        public SyntaxKind Kind { get; }
         public ExpressionSyntax<TNumber> Left { get; }
         public SyntaxKind Operator { get; }
         public ExpressionSyntax<TNumber> Right { get; }

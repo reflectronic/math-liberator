@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Globalization;
 
 namespace MathLiberator.Syntax.Expressions
 {
@@ -11,10 +12,11 @@ namespace MathLiberator.Syntax.Expressions
         public IdentifierExpression(ReadOnlySequence<Char> identifier)
         {
             Identifier = identifier;
-            Kind = SyntaxKind.Identifier;
         }
 
-        public override String? ToString() => Identifier.ToString();
+        String str;
+
+        public override String? ToString() => str ??= Identifier.ToString();
 
     }
 }

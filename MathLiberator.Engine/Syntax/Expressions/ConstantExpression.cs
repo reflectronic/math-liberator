@@ -10,8 +10,6 @@ namespace MathLiberator.Syntax.Expressions
         public ConstantExpression(TNumber value)
         {
             Value = value;
-            Kind = SyntaxKind.Constant;
-
         }
 
         public override String? ToString() => Value.ToString();

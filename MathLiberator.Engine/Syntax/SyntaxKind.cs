@@ -43,6 +43,5 @@ namespace MathLiberator.Syntax
         Arithmetic,
         State,
         Mutation
-        
     }
 }

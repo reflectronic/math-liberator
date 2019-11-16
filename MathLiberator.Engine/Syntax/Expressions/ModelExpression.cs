@@ -17,7 +17,6 @@ namespace MathLiberator.Syntax.Expressions
             Step = step;
             Condition = condition;
             ModelStatements = modelStatements;
-            Kind = SyntaxKind.Model;
         }
 
         public override String? ToString() => @$"[{Start}:{Step}:{Condition}]
