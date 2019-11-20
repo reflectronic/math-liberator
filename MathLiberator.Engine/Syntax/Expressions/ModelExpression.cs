@@ -8,10 +8,10 @@ namespace MathLiberator.Syntax.Expressions
     {
         public ExpressionSyntax<TNumber> Start { get; }
         public ExpressionSyntax<TNumber> Step { get; }
-        public ExpressionSyntax<TNumber> Condition { get; }
+        public BinaryExpression<TNumber> Condition { get; }
         public ImmutableArray<ExpressionSyntax<TNumber>> ModelStatements { get; }
 
-        public ModelExpression(ExpressionSyntax<TNumber> start, ExpressionSyntax<TNumber> step, ExpressionSyntax<TNumber> condition, ImmutableArray<ExpressionSyntax<TNumber>> modelStatements)
+        public ModelExpression(ExpressionSyntax<TNumber> start, ExpressionSyntax<TNumber> step, BinaryExpression<TNumber> condition, ImmutableArray<ExpressionSyntax<TNumber>> modelStatements)
         {
             Start = start;
             Step = step;
@@ -21,7 +21,7 @@ namespace MathLiberator.Syntax.Expressions
 
         public override String? ToString() => @$"[{Start}:{Step}:{Condition}]
 {{
-    {String.Join(Environment.NewLine, ModelStatements)}
+    {String.Join(Environment.NewLine + "    ", ModelStatements)}
 }}";
     }
 }

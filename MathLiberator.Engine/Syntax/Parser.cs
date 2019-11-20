@@ -93,7 +93,7 @@ namespace MathLiberator.Syntax
 
             MatchToken(SyntaxKind.CloseBrace, out _);
 
-            return new ModelExpression<TNumber>(start, step, condition, builder.ToImmutable());
+            return new ModelExpression<TNumber>(start, step, (BinaryExpression<TNumber>) condition, builder.ToImmutable());
         }
 
         /// <summary>
