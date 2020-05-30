@@ -1,12 +1,9 @@
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Json;
 using MathLiberator.Syntax.Expressions;
 
 namespace MathLiberator.Syntax
@@ -42,15 +39,12 @@ namespace MathLiberator.Syntax
         ExpressionSyntax<TNumber> ParseStatement()
         {
             ref var current = ref lexer.Current;
-            switch (current.Kind)
+            return current.Kind switch
             {
-                case SyntaxKind.OpenBracket:
-                    return ParseModelStatement();
-                case SyntaxKind.Identifier:
-                    return ParseStateExpression();
-                default:
-                    return default;
-            }
+                SyntaxKind.OpenBracket => ParseModelStatement(),
+                SyntaxKind.Identifier => ParseStateExpression(),
+                _ => default,
+            };
         }
         
         
@@ -196,7 +190,7 @@ namespace MathLiberator.Syntax
         ConstantExpression<TNumber> ParseNumberLiteral()
         {
             MatchToken(SyntaxKind.Number, out var num);
-            return new ConstantExpression<TNumber>(num.NumericValue.Value);
+            return new ConstantExpression<TNumber>(num.NumericValue);
         }
 
         /// <summary>

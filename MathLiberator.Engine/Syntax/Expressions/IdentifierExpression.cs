@@ -14,9 +14,8 @@ namespace MathLiberator.Syntax.Expressions
             Identifier = identifier;
         }
 
-        String str;
+        String? str;
 
-        public override String? ToString() => str ??= Identifier.ToString();
-
+        public override String ToString() => str ??= Identifier.ToString();
     }
 }

@@ -14,9 +14,11 @@ namespace MathLiberator.Syntax.Expressions
         }
 
         public SyntaxKind Kind { get; }
+
         public ExpressionSyntax<TNumber> Left { get; }
         public SyntaxKind Operator { get; }
         public ExpressionSyntax<TNumber> Right { get; }
-        public override String? ToString() => $"{Left} {Operator} {Right}";
+
+        public override String ToString() => $"{Left} {Operator} {Right}";
     }
 }

@@ -15,10 +15,12 @@ namespace MathLiberator.Syntax
         public Lexer(SequenceReader<Char> reader)
         {
             var t = typeof(TNumber);
+
             if (t != typeof(Single) && t != typeof(Double))
             {
-                throw new ArgumentException("Unsupported type for lexer.", nameof(TNumber));
+                throw new NotSupportedException($"Type '{typeof(TNumber).Name}' is not supported.");
             }
+
             this.reader = reader;
             Current = default;
         }
@@ -182,6 +184,6 @@ namespace MathLiberator.Syntax
             return sequence;
         }
 
-        ReadOnlySpan<Char> SequenceToSpan(in ReadOnlySequence<Char> sequence) => sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray();
+        static ReadOnlySpan<Char> SequenceToSpan(in ReadOnlySequence<Char> sequence) => sequence.IsSingleSegment ? sequence.FirstSpan : sequence.ToArray();
     }
 }

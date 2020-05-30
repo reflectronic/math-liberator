@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# Not focusing on this yet
+dotnet_analyzer_diagnostic.category-Globalization.severity = silent

@@ -15,10 +15,7 @@ namespace MathLiberator.Analysis
         public static ModuleBuilder Module = Assembly.DefineDynamicModule("MathLiberator Dynamic Code");
         public static Int32 Count;
 
-        public static int IncrementCount()
-        {
-            return Interlocked.Increment(ref Count);
-        }
+        public static int IncrementCount() => Interlocked.Increment(ref Count);
     }
 
     public struct ILGenerator<TAdapter, TNumber>
@@ -211,7 +208,6 @@ namespace MathLiberator.Analysis
                     symbols.Add(expr.ToString(), (builder, null));
                     break;
                 }
-                // TODO: Vectorize
                 case SyntaxKind.Arithmetic:
                 {
                     EmitExpression(binary.Left);

@@ -13,6 +13,6 @@ namespace MathLiberator.Syntax.Expressions
             Statements = statements;
         }
         
-        public override String? ToString() => string.Join(Environment.NewLine, Statements);
+        public override String ToString() => string.Join(Environment.NewLine, Statements);
     }
 }

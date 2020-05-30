@@ -11,7 +11,7 @@ namespace MathLiberator
 {
     static class Program
     {
-        static void Main(String[] args)
+        static void Main()
         {
             var test = @"# a falling object with a mass of 10 kilograms (without air resistance)
 g := 9.81
@@ -57,7 +57,7 @@ height = 100
             Console.WriteLine($"Wrote assembly to disk at {Path.Combine(Environment.CurrentDirectory,filename)}. Running model...");
             Console.WriteLine();
             
-            typeof(Program).GetMethod(nameof(Print)).MakeGenericMethod(t).Invoke(null, null);
+            typeof(Program).GetMethod(nameof(Print))!.MakeGenericMethod(t).Invoke(null, null);
         }
 
 
@@ -76,9 +76,9 @@ height = 100
                 il.Emit(OpCodes.Ldstr, $"{f.Name}: ");
                 il.Emit(OpCodes.Ldarg_0);
                 il.Emit(OpCodes.Ldflda, f);
-                il.EmitCall(OpCodes.Call, f.FieldType.GetMethod(nameof(ToString), Array.Empty<Type>()), null);
-                il.EmitCall(OpCodes.Call, typeof(String).GetMethod(nameof(String.Concat), new[] { typeof(String), typeof(String) }), null);
-                il.EmitCall(OpCodes.Call, typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(String) }), null);
+                il.EmitCall(OpCodes.Call, f.FieldType.GetMethod(nameof(ToString), Array.Empty<Type>())!, null);
+                il.EmitCall(OpCodes.Call, typeof(String).GetMethod(nameof(String.Concat), new[] { typeof(String), typeof(String) })!, null);
+                il.EmitCall(OpCodes.Call, typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(String) })!, null);
             }
             
             il.Emit(OpCodes.Ret);

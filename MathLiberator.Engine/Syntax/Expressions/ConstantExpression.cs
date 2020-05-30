@@ -12,6 +12,6 @@ namespace MathLiberator.Syntax.Expressions
             Value = value;
         }
 
-        public override String? ToString() => Value.ToString();
+        public override String ToString() => Value.ToString()!;
     }
 }

@@ -31,7 +31,8 @@ namespace MathLiberator.Syntax
         // TODO: Source location
 
         public ReadOnlySequence<char> StringValue { get; }
-        public TNumber? NumericValue { get; }
+        public TNumber NumericValue { get; }
+
         public SyntaxKind Kind { get; }
 
         public override String? ToString() =>
